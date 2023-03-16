@@ -1,3 +1,5 @@
 <resources>
-    <string name="app_name">main</string>
+    <string name="app_name">TwitGuesser</string>
+    <string name="play_button">Play!</string>
+    <string name="app_settings">Settings</string>
 </resources>
