@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">Tweet Guesser</string>
+
+    <string name="label_home_screen">Home Screen</string>
+    <string name="label_game_play">Guess Tweets</string>
+    <string name="label_settings">Settings</string>
+
 </resources>
