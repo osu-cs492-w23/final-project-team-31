@@ -1,6 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/main_nav_graph.xml">
+    android:id="@+id/main_nav_graph"
+    app:startDestination="@id/home_screen">
+
+    <fragment
+        android:id="@+id/home_screen"
+        android:name="com.example.main.ui.HomeScreenFragment"
+        android:label="@string/label_home_screen">
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/game_play"
+        android:name="com.example.main.ui.GamePlayFragment"
+        android:label="@string/label_game_play">
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/settings"
+        android:name="com.example.main.ui.SettingsFragment"
+        android:label="@string/label_settings">
+
+    </fragment>
 
 </navigation>
