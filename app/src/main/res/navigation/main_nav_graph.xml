@@ -8,14 +8,21 @@
         android:id="@+id/home_screen"
         android:name="com.example.main.ui.HomeScreenFragment"
         android:label="@string/label_home_screen">
-
+        <action
+            android:id="@+id/navigate_to_gameplay"
+            app:destination="@id/game_play"/>
+        <action
+            android:id="@+id/navigate_to_settings"
+            app:destination="@id/settings"/>
     </fragment>
 
     <fragment
         android:id="@+id/game_play"
         android:name="com.example.main.ui.GamePlayFragment"
         android:label="@string/label_game_play">
-
+        <action
+            android:id="@+id/navigate_to_settings"
+            app:destination="@id/settings"/>
     </fragment>
 
     <fragment

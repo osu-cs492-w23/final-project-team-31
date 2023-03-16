@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="pref_difficulty_entries">
+        <item>@string/pref_difficulty_entry_easy</item>
+        <item>@string/pref_difficulty_entry_medium</item>
+        <item>@string/pref_difficulty_entry_hard</item>
+    </string-array>
+
+    <string-array name="pref_difficulty_values">
+        <item>@string/pref_difficulty_value_easy</item>
+        <item>@string/pref_difficulty_value_medium</item>
+        <item>@string/pref_difficulty_value_hard</item>
+    </string-array>
+
+</resources>
