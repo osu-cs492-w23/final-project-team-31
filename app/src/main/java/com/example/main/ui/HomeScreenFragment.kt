@@ -6,6 +6,7 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.widget.Button
+import android.widget.ImageButton
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.example.main.R
@@ -15,7 +16,7 @@ class HomeScreenFragment : Fragment(R.layout.menu_fragment) {
         super.onViewCreated(view, savedInstanceState)
         setHasOptionsMenu(true)
 
-        val playButton : Button = view.findViewById(R.id.play_button)
+        val playButton : ImageButton = view.findViewById(R.id.play_button)
         playButton.setOnClickListener {
             val directions = HomeScreenFragmentDirections.navigateToGameplay()
             findNavController().navigate(directions)
