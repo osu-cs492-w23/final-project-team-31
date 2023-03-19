@@ -2,4 +2,6 @@
     <string name="app_name">TwitGuesser</string>
     <string name="play_button">Play!</string>
     <string name="app_settings">Settings</string>
+    <string name="highest_streak_text">Highest Streak: </string>
+    <string name="accuracy_text">Accuracy: </string>
 </resources>
