@@ -2,17 +2,25 @@ package com.example.main
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
-import androidx.navigation.ui.setupWithNavController
-import com.google.android.material.navigation.NavigationView
+import android.media.MediaPlayer
+import android.net.Uri
 
 class MainActivity : AppCompatActivity() {
     private lateinit var appBarConfig: AppBarConfiguration
+    private val mediaPlayer = MediaPlayer()
+
+    private fun playMedia(){
+        mediaPlayer.setDataSource(this, Uri.parse("android.resource://" + packageName + "/" + R.raw.background_music))
+        mediaPlayer.prepare()
+        mediaPlayer.isLooping = true
+        mediaPlayer.start()
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -28,6 +36,9 @@ class MainActivity : AppCompatActivity() {
             navController,
             appBarConfig
         )
+
+
+        playMedia()
     }
 
     override fun onSupportNavigateUp(): Boolean {
@@ -35,4 +46,10 @@ class MainActivity : AppCompatActivity() {
             findNavController(R.id.nav_host_fragment)
         return navController.navigateUp(appBarConfig) || super.onSupportNavigateUp()
     }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        mediaPlayer.release()
+    }
+
 }
