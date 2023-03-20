@@ -10,6 +10,8 @@
     <string name="highest_streak_text">Highest Streak: </string>
     <string name="accuracy_text">Accuracy: </string>
 
+    <string name="current_streak_text">Current Streak:</string>
+
     <string name="pref_audio_title">Mute Audio</string>
     <string name="pref_audio_key">mute_audio</string>
     <string name="pref_difficulty_title">Choose Difficulty</string>
