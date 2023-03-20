@@ -15,7 +15,7 @@
 
     <string name="next_button_text">Continue</string>
 
-    <string name="pref_audio_title">Mute Audio</string>
+    <string name="pref_audio_title">Play Background Music</string>
     <string name="pref_audio_key">mute_audio</string>
     <string name="pref_difficulty_title">Choose Difficulty</string>
     <string name="pref_difficulty_key">difficulty_choice</string>

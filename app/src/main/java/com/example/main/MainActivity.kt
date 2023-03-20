@@ -9,17 +9,11 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import android.media.MediaPlayer
 import android.net.Uri
+import androidx.preference.PreferenceManager
 
 class MainActivity : AppCompatActivity() {
     private lateinit var appBarConfig: AppBarConfiguration
     private val mediaPlayer = MediaPlayer()
-
-    private fun playMedia(){
-        mediaPlayer.setDataSource(this, Uri.parse("android.resource://" + packageName + "/" + R.raw.background_music))
-        mediaPlayer.prepare()
-        mediaPlayer.isLooping = true
-        mediaPlayer.start()
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,8 +31,31 @@ class MainActivity : AppCompatActivity() {
             appBarConfig
         )
 
+        val sharedPref = PreferenceManager.getDefaultSharedPreferences(this)
 
-        playMedia()
+        // Listen for changes to the preference value
+        sharedPref.registerOnSharedPreferenceChangeListener { _, key ->
+            if (key == getString(R.string.pref_audio_key)) {
+                val enableAudio = sharedPref.getBoolean(key, true)
+                if (enableAudio) {
+                    if (!mediaPlayer.isPlaying) {
+                        // If the media player is not playing, start it
+                        mediaPlayer.start()
+                    } else {
+                        // If the media player is playing, reset it to the beginning
+                        mediaPlayer.seekTo(0)
+                    }
+                } else {
+                    // If the preference is disabled, pause the media player
+                    mediaPlayer.pause()
+                }
+            }
+        }
+
+        // Start playing the media if the preference is enabled
+        if (sharedPref.getBoolean(getString(R.string.pref_audio_key), true)) {
+            playMedia()
+        }
     }
 
     override fun onSupportNavigateUp(): Boolean {
@@ -50,6 +67,14 @@ class MainActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         mediaPlayer.release()
+    }
+
+    private fun playMedia(){
+
+        mediaPlayer.setDataSource(this, Uri.parse("android.resource://" + packageName + "/" + R.raw.background_music))
+        mediaPlayer.prepare()
+        mediaPlayer.isLooping = true
+        mediaPlayer.start()
     }
 
 }
