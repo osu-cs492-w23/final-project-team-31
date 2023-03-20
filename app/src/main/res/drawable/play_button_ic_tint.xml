@@ -7,5 +7,5 @@
     <item android:state_activated="true" android:color="@color/twitter_extralightgrey" />
 
     <!-- Default state. -->
-    <item android:color="@color/twitter_blue" />
+    <item android:color="@color/spotify_green" />
 </selector>

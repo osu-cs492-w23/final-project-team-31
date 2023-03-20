@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/twitter_black">
+    android:background="@color/spotify_black">
 
     <TextView
         android:id="@+id/highest_streak_text"
@@ -67,7 +67,7 @@
         android:layout_width="345dp"
         android:layout_height="119dp"
         android:gravity="center"
-        android:src="@drawable/twitguesser_logo"
+        android:src="@drawable/ic_song_guesser"
 
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

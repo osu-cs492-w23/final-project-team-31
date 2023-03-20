@@ -20,7 +20,32 @@ class GamePlayFragment : Fragment(R.layout.game_fragment) {
         super.onViewCreated(view, savedInstanceState)
         setHasOptionsMenu(true)
 
+
+
         setDifficulty(view)
+
+        val button1 : Button = view.findViewById(R.id.button_1)
+        button1.setOnClickListener {
+            val directions = GamePlayFragmentDirections.navigateToResult()
+            findNavController().navigate(directions) }
+
+
+        val button2 : Button = view.findViewById(R.id.button_2)
+        button2.setOnClickListener {
+        val directions = GamePlayFragmentDirections.navigateToResult()
+            findNavController().navigate(directions) }
+
+        val button3 : Button = view.findViewById(R.id.button_3)
+        button3.setOnClickListener {
+        val directions = GamePlayFragmentDirections.navigateToResult()
+            findNavController().navigate(directions) }
+
+        val button4 : Button = view.findViewById(R.id.button_4)
+        button4.setOnClickListener {
+        val directions = GamePlayFragmentDirections.navigateToResult()
+            findNavController().navigate(directions) }
+
+
     }
 
     override fun onResume() {
