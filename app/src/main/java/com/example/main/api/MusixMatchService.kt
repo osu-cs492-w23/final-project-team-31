@@ -3,6 +3,7 @@ package com.example.main.api
 import com.example.main.data.MusixMatch.searchLyricData.MMLyricResult
 import com.example.main.data.MusixMatch.searchSongData.MMSongResult
 import retrofit2.Call
+import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.http.GET
@@ -10,19 +11,19 @@ import retrofit2.http.Query
 
 interface MusixMatchService {
     @GET("track.lyrics.get")
-    fun getSongLyrics(
-        @Query("track_id") trackID: String,
+    suspend fun getSongLyrics(
+        @Query("track_id") trackID: Int,
         @Query("apikey") apiKey: String = "13f51e4b4894a8bf67e26e4bf2ade835",
-    ): Call<MMLyricResult>
+    ): Response<MMLyricResult>
 
     @GET("track.search")
-    fun getTrackID(
+    suspend fun getTrackID(
         @Query("q_track") songName: String,
         @Query("q_artist") artistName: String,
         @Query("page_size") pageSize: String = "1",
         @Query("s_track_rating") songRating: String = "desc",
         @Query("apikey") apiKey: String = "13f51e4b4894a8bf67e26e4bf2ade835"
-    ): Call<MMSongResult>
+    ): Response<MMSongResult>
 
     companion object {
         private const val BASE_URL = "https://api.musixmatch.com/ws/1.1/"
