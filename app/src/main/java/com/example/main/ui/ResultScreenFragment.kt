@@ -12,6 +12,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.main.R
@@ -20,9 +21,15 @@ class ResultScreenFragment : Fragment(R.layout.result_fragment) {
     private var isCorrect: Boolean = false
     private var correctAnswer: String = "placeholder"
     private val args: ResultScreenFragmentArgs by navArgs()
+    private val playerStatsViewModel: PlayerStatsViewModel by viewModels()
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         isCorrect = args.isCorrect
         correctAnswer = args.correctAnswer
+
+        playerStatsViewModel.getCurrStreakLength().observe(viewLifecycleOwner) {currentStreak ->
+            val streakTextView = view.findViewById<TextView>(R.id.current_streak_value)
+            streakTextView.text = currentStreak.toString()
+        }
 
         // Overrides android back button to go back to game screen (probably not good practice idk)
         requireActivity().onBackPressedDispatcher.addCallback(
