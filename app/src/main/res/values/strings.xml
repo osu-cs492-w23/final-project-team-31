@@ -13,6 +13,8 @@
 
     <string name="current_streak_text">Current Streak:</string>
 
+    <string name="result_correct_text">Correct!</string>
+    <string name="result_wrong_text">Wrong!</string>
     <string name="next_button_text">Continue</string>
 
     <string name="pref_audio_title">Play Background Music</string>
