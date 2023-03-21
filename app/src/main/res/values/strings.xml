@@ -40,4 +40,7 @@
 
     <string name="display_percent">%1$.0f%%</string>
 
+    <string name="results_display_correct">Correct!</string>
+    <string name="results_display_incorrect">Incorrect! The correct answer is: %1$s</string>
+
 </resources>
