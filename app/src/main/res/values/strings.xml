@@ -35,4 +35,9 @@
     <string name="pref_reset_key">reset_stats</string>
     <string name="pref_reset_summary">Click here to reset your statistics</string>
 
+    <string name="db_val_correct">Correct</string>
+    <string name="db_val_incorrect">Incorrect</string>
+
+    <string name="display_percent">%1$.0f%%</string>
+
 </resources>
