@@ -8,7 +8,6 @@ import android.view.View
 import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
 import android.widget.Button
-import android.widget.ImageButton
 import android.widget.ImageView
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -50,6 +49,11 @@ class ResultScreenFragment : Fragment(R.layout.result_fragment) {
         return when (item.itemId) {
             R.id.action_settings -> {
                 val directions = ResultScreenFragmentDirections.navigateToSettings()
+                findNavController().navigate(directions)
+                true
+            }
+            android.R.id.home -> {
+                val directions = ResultScreenFragmentDirections.navigateToGameplay()
                 findNavController().navigate(directions)
                 true
             }

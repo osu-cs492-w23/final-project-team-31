@@ -1,6 +1,5 @@
 package com.example.main.ui
 
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
@@ -10,7 +9,9 @@ import android.view.View
 import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
 import android.widget.Button
+import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.preference.PreferenceManager
 import com.example.main.R
@@ -19,11 +20,16 @@ import kotlin.random.Random
 class GamePlayFragment : Fragment(R.layout.game_fragment) {
     private var numButtons = 4
     private lateinit var buttonArray : Array<Button>
+    private val playerStatsViewModel: PlayerStatsViewModel by viewModels()
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setHasOptionsMenu(true)
 
-
+        playerStatsViewModel.getCurrStreakLength().observe(viewLifecycleOwner) {currentStreak ->
+            val streakTextView = view.findViewById<TextView>(R.id.current_streak_value)
+            streakTextView.text = currentStreak.toString()
+        }
 
         setDifficulty(view)
 
@@ -45,6 +51,7 @@ class GamePlayFragment : Fragment(R.layout.game_fragment) {
         // Set listener for button 1
         buttonArray[0].text = buttonStringArray[0]
         buttonArray[0].setOnClickListener {
+            playerStatsViewModel.addStat(getString(R.string.db_val_incorrect))
             val directions = GamePlayFragmentDirections.navigateToResult(correctString)
             findNavController().navigate(directions)
         }
@@ -52,6 +59,7 @@ class GamePlayFragment : Fragment(R.layout.game_fragment) {
         // Set listener for button 2
         buttonArray[1].text = buttonStringArray[1]
         buttonArray[1].setOnClickListener {
+            playerStatsViewModel.addStat(getString(R.string.db_val_incorrect))
             val directions = GamePlayFragmentDirections.navigateToResult(correctString)
             findNavController().navigate(directions)
         }
@@ -60,6 +68,7 @@ class GamePlayFragment : Fragment(R.layout.game_fragment) {
         if (numButtons > 2) {
             buttonArray[2].text = buttonStringArray[2]
             buttonArray[2].setOnClickListener {
+                playerStatsViewModel.addStat(getString(R.string.db_val_incorrect))
                 val directions = GamePlayFragmentDirections.navigateToResult(correctString)
                 findNavController().navigate(directions)
             }
@@ -69,16 +78,20 @@ class GamePlayFragment : Fragment(R.layout.game_fragment) {
         if (numButtons > 3) {
             buttonArray[3].text = buttonStringArray[3]
             buttonArray[3].setOnClickListener {
+                playerStatsViewModel.addStat(getString(R.string.db_val_incorrect))
                 val directions = GamePlayFragmentDirections.navigateToResult(correctString)
                 findNavController().navigate(directions)
             }
         }
 
         // Set listener for the correct choice
+        correctButton.text = "correct"
         correctButton.setOnClickListener {
+            playerStatsViewModel.addStat(getString(R.string.db_val_correct))
             val directions = GamePlayFragmentDirections.navigateToResult(correctString, true)
             findNavController().navigate(directions)
         }
+
 
     }
 
@@ -97,6 +110,11 @@ class GamePlayFragment : Fragment(R.layout.game_fragment) {
         return when (item.itemId) {
             R.id.action_settings -> {
                 val directions = GamePlayFragmentDirections.navigateToSettings()
+                findNavController().navigate(directions)
+                true
+            }
+            android.R.id.home -> {
+                val directions = GamePlayFragmentDirections.navigateToHome()
                 findNavController().navigate(directions)
                 true
             }

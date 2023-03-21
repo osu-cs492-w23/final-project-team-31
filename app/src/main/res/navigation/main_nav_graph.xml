@@ -26,6 +26,9 @@
         <action
             android:id="@+id/navigate_to_result"
             app:destination="@id/result_screen"/>
+        <action
+            android:id="@+id/navigate_to_home"
+            app:destination="@id/home_screen"/>
     </fragment>
 
     <fragment

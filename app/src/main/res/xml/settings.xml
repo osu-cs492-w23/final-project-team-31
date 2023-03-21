@@ -21,7 +21,8 @@
         <Preference
             android:title="@string/pref_reset_title"
             android:key="@string/pref_reset_key"
-            android:summary="@string/pref_reset_summary"/>
+            android:summary="@string/pref_reset_summary"
+            app:useSimpleSummaryProvider="true"/>
 
     </PreferenceCategory>
 
