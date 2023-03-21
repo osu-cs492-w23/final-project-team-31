@@ -26,12 +26,22 @@
         <action
             android:id="@+id/navigate_to_result"
             app:destination="@id/result_screen"/>
+        <action
+            android:id="@+id/navigate_to_home"
+            app:destination="@id/home_screen"/>
     </fragment>
 
     <fragment
         android:id="@+id/result_screen"
         android:name="com.example.main.ui.ResultScreenFragment"
         android:label="@string/label_result_screen">
+        <argument
+            android:name="correctAnswer"
+            app:argType="string"/>
+        <argument
+            android:name="isCorrect"
+            app:argType="boolean"
+            android:defaultValue="false"/>
         <action
             android:id="@+id/navigate_to_settings"
             app:destination="@+id/settings"/>

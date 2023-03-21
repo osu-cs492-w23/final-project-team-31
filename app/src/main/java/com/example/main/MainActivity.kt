@@ -1,5 +1,6 @@
 package com.example.main
 
+import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.navigation.findNavController
@@ -18,8 +19,13 @@ import com.squareup.moshi.Moshi
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import androidx.activity.viewModels
+import androidx.preference.PreferenceManager
+import com.example.main.ui.PlayerStatsViewModel
 
-class MainActivity : AppCompatActivity() {
+
+class MainActivity : AppCompatActivity(),
+    SharedPreferences.OnSharedPreferenceChangeListener {
     private lateinit var appBarConfig: AppBarConfiguration
     private val mediaPlayer = MediaPlayer()
     private val musicMatchService = MusixMatchService.create()
@@ -43,28 +49,32 @@ class MainActivity : AppCompatActivity() {
 
         val sharedPref = PreferenceManager.getDefaultSharedPreferences(this)
 
+
         // Listen for changes to the preference value
-        sharedPref.registerOnSharedPreferenceChangeListener { _, key ->
-            if (key == getString(R.string.pref_audio_key)) {
-                val enableAudio = sharedPref.getBoolean(key, true)
-                if (enableAudio) {
-                    if (!mediaPlayer.isPlaying) {
-                        // If the media player is not playing, start it
-                        mediaPlayer.start()
-                    } else {
-                        // If the media player is playing, reset it to the beginning
-                        mediaPlayer.seekTo(0)
-                    }
-                } else {
-                    // If the preference is disabled, pause the media player
-                    mediaPlayer.pause()
-                }
-            }
-        }
+        sharedPref.registerOnSharedPreferenceChangeListener(this)
 
         // Start playing the media if the preference is enabled
         if (sharedPref.getBoolean(getString(R.string.pref_audio_key), true)) {
             playMedia()
+        }
+    }
+
+    override fun onSharedPreferenceChanged(prefs: SharedPreferences?, key: String?) {
+        Log.d("MainActivity", "Preference setting clicked. Key: ${key}")
+        if (key == getString(R.string.pref_audio_key)) {
+            val enableAudio = prefs?.getBoolean(key, true)?: false
+            if (enableAudio) {
+                if (!mediaPlayer.isPlaying) {
+                    // If the media player is not playing, start it
+                    mediaPlayer.start()
+                } else {
+                    // If the media player is playing, reset it to the beginning
+                    mediaPlayer.seekTo(0)
+                }
+            } else {
+                // If the preference is disabled, pause the media player
+                mediaPlayer.pause()
+            }
         }
     }
 

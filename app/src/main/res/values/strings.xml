@@ -13,6 +13,8 @@
 
     <string name="current_streak_text">Current Streak:</string>
 
+    <string name="result_correct_text">Correct!</string>
+    <string name="result_wrong_text">Wrong!</string>
     <string name="next_button_text">Continue</string>
 
     <string name="pref_audio_title">Play Background Music</string>
@@ -32,5 +34,13 @@
     <string name="pref_reset_title">Reset Statistics</string>
     <string name="pref_reset_key">reset_stats</string>
     <string name="pref_reset_summary">Click here to reset your statistics</string>
+
+    <string name="db_val_correct">Correct</string>
+    <string name="db_val_incorrect">Incorrect</string>
+
+    <string name="display_percent">%1$.0f%%</string>
+
+    <string name="results_display_correct">Correct!</string>
+    <string name="results_display_incorrect">Incorrect! The correct answer is: %1$s</string>
 
 </resources>
