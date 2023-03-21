@@ -11,16 +11,27 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import android.media.MediaPlayer
 import android.net.Uri
 import android.util.Log
+import androidx.preference.PreferenceManager
+import com.example.main.api.MusixMatchService
+import com.example.main.data.MusixMatch.searchLyricData.MMLyricResult
+import com.example.main.data.MusixMatch.searchSongData.MMSongResult
+import com.squareup.moshi.Moshi
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import androidx.activity.viewModels
 import androidx.preference.PreferenceManager
 import com.example.main.ui.PlayerStatsViewModel
+
 
 class MainActivity : AppCompatActivity(),
     SharedPreferences.OnSharedPreferenceChangeListener {
     private lateinit var appBarConfig: AppBarConfiguration
     private val mediaPlayer = MediaPlayer()
+    private val musicMatchService = MusixMatchService.create()
 
     override fun onCreate(savedInstanceState: Bundle?) {
+
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
@@ -86,4 +97,30 @@ class MainActivity : AppCompatActivity(),
         mediaPlayer.start()
     }
 
+    private fun doSongSearch(songName: String, artistName: String){
+        musicMatchService.getTrackID(songName, artistName).enqueue(object : Callback<MMSongResult> {
+            override fun onResponse(call: Call<MMSongResult>, response: Response<MMSongResult>) {
+                if (response.isSuccessful) {
+                    Log.d("MainActivity", "Song Search Results: ${response.body()?.message?.mmSongBody}")
+                }
+            }
+
+            override fun onFailure(call: Call<MMSongResult>, t: Throwable) {
+                Log.d("MainActivity", "Error making API call: ${t.message}")
+            }
+        })
+    }
+    private fun doSongLyricSearch(trackID: String){
+        musicMatchService.getSongLyrics(trackID).enqueue(object : Callback<MMLyricResult> {
+            override fun onResponse(call: Call<MMLyricResult>, response: Response<MMLyricResult>) {
+                if (response.isSuccessful) {
+                    Log.d("MainActivity", "Lyric Search Results: ${response.body()?.message?.mmLyricBody?.lyrics?.lyrics}")
+                }
+            }
+
+            override fun onFailure(call: Call<MMLyricResult>, t: Throwable) {
+                Log.d("MainActivity", "Error making API call: ${t.message}")
+            }
+        })
+    }
 }
