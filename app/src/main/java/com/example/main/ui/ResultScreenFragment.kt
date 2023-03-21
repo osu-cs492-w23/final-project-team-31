@@ -1,5 +1,7 @@
 package com.example.main.ui
 
+import android.media.MediaPlayer
+import android.media.SoundPool
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
@@ -20,6 +22,10 @@ class ResultScreenFragment : Fragment(R.layout.result_fragment) {
     private var isCorrect: Boolean = false
     private var correctAnswer: String = "placeholder"
     private val args: ResultScreenFragmentArgs by navArgs()
+    private lateinit var soundPool: SoundPool
+    private var soundId: Int = 0
+    private val mediaPlayer = MediaPlayer()
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         isCorrect = args.isCorrect
         correctAnswer = args.correctAnswer
@@ -35,18 +41,22 @@ class ResultScreenFragment : Fragment(R.layout.result_fragment) {
             }
         )
 
+
+
         val correctView = view.findViewById<ImageView>(R.id.ic_guess_correct)
         val incorrectView = view.findViewById<ImageView>(R.id.ic_guess_wrong)
         val correctText = view.findViewById<TextView>(R.id.text_guess_correct)
         val incorrectText = view.findViewById<TextView>(R.id.text_guess_wrong)
         if (isCorrect) {
-            correctText.text = getString(R.string.results_display_correct)
+            val mediaPlayer = MediaPlayer.create(context, R.raw.negative)
+            mediaPlayer.start()
             correctView.visibility = VISIBLE
             incorrectView.visibility = INVISIBLE
             correctText.visibility = VISIBLE
             incorrectText.visibility = INVISIBLE
         } else {
-            incorrectText.text = getString(R.string.results_display_incorrect, correctAnswer)
+            val mediaPlayer = MediaPlayer.create(context, R.raw.positive)
+            mediaPlayer.start()
             correctView.visibility = INVISIBLE
             incorrectView.visibility = VISIBLE
             correctText.visibility = INVISIBLE
@@ -80,5 +90,9 @@ class ResultScreenFragment : Fragment(R.layout.result_fragment) {
             }
             else -> super.onOptionsItemSelected(item)
         }
+    }
+    override fun onDestroy() {
+        super.onDestroy()
+        mediaPlayer.release()
     }
 }

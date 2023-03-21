@@ -19,9 +19,6 @@ import com.squareup.moshi.Moshi
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import androidx.activity.viewModels
-import androidx.preference.PreferenceManager
-import com.example.main.ui.PlayerStatsViewModel
 
 
 class MainActivity : AppCompatActivity(),
