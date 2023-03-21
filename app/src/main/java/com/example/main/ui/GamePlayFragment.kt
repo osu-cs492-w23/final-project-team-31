@@ -16,12 +16,124 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.preference.PreferenceManager
 import com.example.main.R
+import com.example.main.api.MusixMatchService
+import com.example.main.data.MusixMatch.searchLyricData.MMLyricResult
+import com.example.main.data.MusixMatch.searchSongData.MMSongResult
+import com.example.main.data.MusixMatch.searchSongData.MMSongTrack
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import kotlin.random.Random
 
 class GamePlayFragment : Fragment(R.layout.game_fragment) {
     private var numButtons = 4
     private lateinit var buttonArray : Array<Button>
     private val playerStatsViewModel: PlayerStatsViewModel by viewModels()
+    private val musixMatchViewModel : MusixMatchViewModel by viewModels()
+    private val totalSongArray : Array<String> = arrayOf(
+        "Señorita",
+        "China",
+        "boyfriend",
+        "Beautiful People",
+        "Goodbyes",
+        "I Don't Care",
+        "Ransom",
+        "How Do You Sleep?",
+        "Old Town Road - Remix",
+        "bad guy",
+        "Callaita",
+        "Loco Contigo",
+        "Someone You Loved",
+        "Otro Trago - Remix",
+        "Money In The Grave",
+        "No Guidance",
+        "LA CANCIÓN",
+        "Sunflower",
+        "Lalala",
+        "Truth Hurts",
+        "Piece Of Your Heart",
+        "Panini",
+        "No Me Conoce - Remix",
+        "Soltera - Remix",
+        "bad guy",
+        "If I Can't Have You",
+        "Dance Monkey",
+        "It's You",
+        "Con Calma",
+        "QUE PRETENDES",
+        "Takeaway",
+        "Kill Bill",
+        "Congratulations",
+        "The London",
+        "Never Really Over",
+        "Summer Days",
+        "Otro Trago",
+        "Antisocial",
+        "Sucker",
+        "fuck, i'm lonely",
+        "Flowers",
+        "You Need To Calm Down",
+        "Shallow",
+        "Talk",
+        "Con Altura",
+        "One Thing Right",
+        "Te Robaré",
+        "Happier",
+        "Call You Mine",
+        "Cross Me")
+
+    private var totalArtistsArray : Array<String> = arrayOf(
+        "Shawn Mendes",
+        "Anuel AA",
+        "Ariana Grande",
+        "Ed Sheeran",
+        "Post Malone",
+        "Ed Sheeran",
+        "Lil Tecca",
+        "Sam Smith",
+        "Lil Nas X",
+        "Billie Eilish",
+        "Bad Bunny",
+        "DJ Snake",
+        "Lewis Capaldi",
+        "Sech",
+        "Drake",
+        "Chris Brown",
+        "J Balvin",
+        "Post Malone",
+        "Y2K",
+        "Lizzo",
+        "MEDUZA",
+        "Lil Nas X",
+        "Jhay Cortez",
+        "Lunay",
+        "Billie Eilish",
+        "Shawn Mendes",
+        "Tones and I",
+        "Ali Gatie",
+        "Daddy Yankee",
+        "J Balvin",
+        "The Chainsmokers",
+        "SZA",
+        "Post Malone",
+        "Young Thug",
+        "Katy Perry",
+        "Martin Garrix",
+        "Sech",
+        "Ed Sheeran",
+        "Jonas Brothers",
+        "Lauv",
+        "Miley Cyrus",
+        "Taylor Swift",
+        "Lady Gaga",
+        "Khalid",
+        "ROSALÍA",
+        "Marshmello",
+        "Nicky Jam",
+        "Marshmello",
+        "The Chainsmokers",
+        "Ed Sheeran"
+    )
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -44,9 +156,30 @@ class GamePlayFragment : Fragment(R.layout.game_fragment) {
         }
 
         setDifficulty(view)
+        val songChoiceArray : Array<Int> = arrayOf(-1,-1,-1,-1)
+        for (i in 0..3) {
+            var newint = Random.nextInt(0,50)
+            while (songChoiceArray.contains(newint)) {
+                newint = Random.nextInt(0,50)
+            }
+            songChoiceArray[i] = newint
+        }
 
-        // Do API calls and get data to fill here
-        val buttonStringArray : Array<String> = arrayOf( "button 1", "button 2", "button 3", "button 4")
+//        for (i in 0..49) {
+//            musixMatchViewModel.getSongData(totalSongArray[i], totalArtistsArray[i])
+//        }
+
+        // Call spotify API here
+        val buttonStringArray : Array<String> = arrayOf(
+            totalSongArray[songChoiceArray[0]],
+            totalSongArray[songChoiceArray[1]],
+            totalSongArray[songChoiceArray[2]],
+            totalSongArray[songChoiceArray[3]])
+        val buttonArtistArray : Array<String> = arrayOf(
+            totalArtistsArray[songChoiceArray[0]],
+            totalArtistsArray[songChoiceArray[1]],
+            totalArtistsArray[songChoiceArray[2]],
+            totalArtistsArray[songChoiceArray[3]])
 
         buttonArray = arrayOf(
             view.findViewById(R.id.button_1),
@@ -58,7 +191,37 @@ class GamePlayFragment : Fragment(R.layout.game_fragment) {
         val correctIdx = Random.nextInt(0, numButtons)
         val correctButton = buttonArray[correctIdx]
         val correctString = buttonStringArray[correctIdx]
-        Log.d(tag,"Correct button is ${correctString}")
+        val correctArtist = buttonArtistArray[correctIdx]
+
+        // Call lyrics API here
+        val songLyricsTextView = view.findViewById<TextView>(R.id.tweet_text)
+        musixMatchViewModel.getSongData(correctString, correctArtist)
+
+        musixMatchViewModel.songData.observe(viewLifecycleOwner) { result ->
+            Log.d(tag, "Observed change in songData")
+            val trackList = result?.message?.mmSongBody?.trackList
+            if (trackList != null) {
+                val hasLyrics = trackList[0].track.has_lyrics
+                val songID = trackList[0].track.songID
+                Log.d(tag, "Received songID of $songID, songName ${trackList[0].track.songName}")
+                if(hasLyrics == 1) {
+                   musixMatchViewModel.getLyricData(songID)
+                } else {
+                    Log.d(tag, "Song ${trackList[0].track.songName} does not have lyrics")
+                    songLyricsTextView.text = "Lyrics not available"
+                }
+            }
+        }
+
+        musixMatchViewModel.lyricData.observe(viewLifecycleOwner) {result ->
+            Log.d(tag, "Observed change in lyricData")
+            val lyrics = result?.message?.mmLyricBody?.lyrics?.lyrics?:"Loading..."
+            Log.d(tag, "Received lyricData of $lyrics")
+            songLyricsTextView.text = lyrics.take(350)
+        }
+
+
+        Log.d(tag,"Correct button is $correctString")
 
         // Set listener for button 1
         buttonArray[0].text = buttonStringArray[0]
@@ -97,7 +260,6 @@ class GamePlayFragment : Fragment(R.layout.game_fragment) {
         }
 
         // Set listener for the correct choice
-        correctButton.text = "correct"
         correctButton.setOnClickListener {
             playerStatsViewModel.addStat(getString(R.string.db_val_correct))
             val directions = GamePlayFragmentDirections.navigateToResult(correctString, true)
@@ -156,4 +318,5 @@ class GamePlayFragment : Fragment(R.layout.game_fragment) {
             numButtons = 4
         }
     }
+
 }
