@@ -14,8 +14,11 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.preference.PreferenceManager
 import com.example.main.R
+import kotlin.random.Random
 
 class GamePlayFragment : Fragment(R.layout.game_fragment) {
+    private var numButtons = 4
+    private lateinit var buttonArray : Array<Button>
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setHasOptionsMenu(true)
@@ -24,27 +27,58 @@ class GamePlayFragment : Fragment(R.layout.game_fragment) {
 
         setDifficulty(view)
 
-        val button1 : Button = view.findViewById(R.id.button_1)
-        button1.setOnClickListener {
-            val directions = GamePlayFragmentDirections.navigateToResult()
-            findNavController().navigate(directions) }
+        // Do API calls and get data to fill here
+        val buttonStringArray : Array<String> = arrayOf( "button 1", "button 2", "button 3", "button 4")
 
+        buttonArray = arrayOf(
+            view.findViewById(R.id.button_1),
+            view.findViewById(R.id.button_2),
+            view.findViewById(R.id.button_3),
+            view.findViewById(R.id.button_4)
+        )
 
-        val button2 : Button = view.findViewById(R.id.button_2)
-        button2.setOnClickListener {
-        val directions = GamePlayFragmentDirections.navigateToResult()
-            findNavController().navigate(directions) }
+        val correctIdx = Random.nextInt(0, numButtons)
+        val correctButton = buttonArray[correctIdx]
+        val correctString = buttonStringArray[correctIdx]
+        Log.d(tag,"Correct button is ${correctString}")
 
-        val button3 : Button = view.findViewById(R.id.button_3)
-        button3.setOnClickListener {
-        val directions = GamePlayFragmentDirections.navigateToResult()
-            findNavController().navigate(directions) }
+        // Set listener for button 1
+        buttonArray[0].text = buttonStringArray[0]
+        buttonArray[0].setOnClickListener {
+            val directions = GamePlayFragmentDirections.navigateToResult(correctString)
+            findNavController().navigate(directions)
+        }
 
-        val button4 : Button = view.findViewById(R.id.button_4)
-        button4.setOnClickListener {
-        val directions = GamePlayFragmentDirections.navigateToResult()
-            findNavController().navigate(directions) }
+        // Set listener for button 2
+        buttonArray[1].text = buttonStringArray[1]
+        buttonArray[1].setOnClickListener {
+            val directions = GamePlayFragmentDirections.navigateToResult(correctString)
+            findNavController().navigate(directions)
+        }
 
+        // Set listener for button 3
+        if (numButtons > 2) {
+            buttonArray[2].text = buttonStringArray[2]
+            buttonArray[2].setOnClickListener {
+                val directions = GamePlayFragmentDirections.navigateToResult(correctString)
+                findNavController().navigate(directions)
+            }
+        }
+
+        // Set listener for button 4
+        if (numButtons > 3) {
+            buttonArray[3].text = buttonStringArray[3]
+            buttonArray[3].setOnClickListener {
+                val directions = GamePlayFragmentDirections.navigateToResult(correctString)
+                findNavController().navigate(directions)
+            }
+        }
+
+        // Set listener for the correct choice
+        correctButton.setOnClickListener {
+            val directions = GamePlayFragmentDirections.navigateToResult(correctString, true)
+            findNavController().navigate(directions)
+        }
 
     }
 
@@ -78,14 +112,17 @@ class GamePlayFragment : Fragment(R.layout.game_fragment) {
         if (difficulty == getString(R.string.pref_difficulty_value_easy)) {
             button3.visibility = INVISIBLE
             button4.visibility = INVISIBLE
+            numButtons = 2
         }
         else if (difficulty == getString(R.string.pref_difficulty_value_medium)) {
             button3.visibility = VISIBLE
             button4.visibility = INVISIBLE
+            numButtons = 3
         }
         else {
             button3.visibility = VISIBLE
             button4.visibility = VISIBLE
+            numButtons = 4
         }
     }
 }
