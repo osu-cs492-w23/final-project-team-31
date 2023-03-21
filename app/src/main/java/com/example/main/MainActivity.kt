@@ -23,13 +23,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var appBarConfig: AppBarConfiguration
     private val mediaPlayer = MediaPlayer()
     private val musicMatchService = MusixMatchService.create()
-    // Temp Global Vars Song Data and Lyrics
-//    private val song:
 
     override fun onCreate(savedInstanceState: Bundle?) {
-
-        doSongSearch("kill bill", "sza")
-        doSongLyricSearch("251817814")
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
