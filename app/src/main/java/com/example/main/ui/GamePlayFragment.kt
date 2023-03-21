@@ -10,6 +10,7 @@ import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
 import android.widget.Button
 import android.widget.TextView
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -25,6 +26,17 @@ class GamePlayFragment : Fragment(R.layout.game_fragment) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setHasOptionsMenu(true)
+
+        // Overrides android back buttion to go back to home screen (probably not good practice idk)
+        requireActivity().onBackPressedDispatcher.addCallback(
+            viewLifecycleOwner,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    val directions = GamePlayFragmentDirections.navigateToHome()
+                    findNavController().navigate(directions)
+                }
+            }
+        )
 
         playerStatsViewModel.getCurrStreakLength().observe(viewLifecycleOwner) {currentStreak ->
             val streakTextView = view.findViewById<TextView>(R.id.current_streak_value)
@@ -101,6 +113,7 @@ class GamePlayFragment : Fragment(R.layout.game_fragment) {
             setDifficulty(view)
         }
     }
+
 
     override fun onCreateOptionsMenu(menu: Menu, menuInflater: MenuInflater) {
         menuInflater.inflate(R.menu.main_nav_drawer, menu)

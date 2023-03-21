@@ -9,6 +9,8 @@ import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
 import android.widget.Button
 import android.widget.ImageView
+import android.widget.TextView
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -22,14 +24,33 @@ class ResultScreenFragment : Fragment(R.layout.result_fragment) {
         isCorrect = args.isCorrect
         correctAnswer = args.correctAnswer
 
+        // Overrides android back button to go back to game screen (probably not good practice idk)
+        requireActivity().onBackPressedDispatcher.addCallback(
+            viewLifecycleOwner,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    val directions = ResultScreenFragmentDirections.navigateToGameplay()
+                    findNavController().navigate(directions)
+                }
+            }
+        )
+
         val correctView = view.findViewById<ImageView>(R.id.ic_guess_correct)
         val incorrectView = view.findViewById<ImageView>(R.id.ic_guess_wrong)
+        val correctText = view.findViewById<TextView>(R.id.text_guess_correct)
+        val incorrectText = view.findViewById<TextView>(R.id.text_guess_wrong)
         if (isCorrect) {
+            correctText.text = getString(R.string.results_display_correct)
             correctView.visibility = VISIBLE
             incorrectView.visibility = INVISIBLE
+            correctText.visibility = VISIBLE
+            incorrectText.visibility = INVISIBLE
         } else {
+            incorrectText.text = getString(R.string.results_display_incorrect, correctAnswer)
             correctView.visibility = INVISIBLE
             incorrectView.visibility = VISIBLE
+            correctText.visibility = INVISIBLE
+            incorrectText.visibility = VISIBLE
         }
         super.onViewCreated(view, savedInstanceState)
         setHasOptionsMenu(true)
